@@ -8,7 +8,7 @@ USE employeeDB;
 -- id - INT PRIMARY KEY
 -- name - VARCHAR(30) to hold department name
 CREATE TABLE department(
-    id INT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
 );
 -- role:
