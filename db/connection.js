@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
   });
 
   connection.connect( () => {
-      //console.log("connected as " + connection.threadId);
+      console.log("connected as " + connection.threadId);
   });
 
   connection.query = util.promisify(connection.query);

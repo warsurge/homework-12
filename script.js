@@ -59,11 +59,73 @@ function addEmployee(){
 
 
 // -- View departments, roles, employees
-function viewAll()
-function viewDepartment()
-function viewRole()
+function viewAll(){
+
+}
+function viewDepartment(){
+
+}
+function viewRole(){
+
+}
 // -- Update employee roles
-function updateEmployee()
+function updateEmployee(){
+    connection.query("SELECT * FROM employee", function(err, results){
+        if (err) throw err;
+    
+    inquirer.prompt([
+        {
+            name:"choice",
+            type: "rawlist",
+            choices: function(){
+                var choiceArray = [];
+                for (var i =0; i<results.length; i++){
+                    choiceArray.push(results[i].first_name)
+                }
+                return choiceArray;
+            },
+            message: "Which person would you like to update?"
+        },
+        {
+            name: "job",
+            type:"input",
+            message:"What is the position they are going to be in?"
+        }
+    ]).then(function(answer){
+        const chosenPerson;
+        for(var i = 0; i < results.length; i++){
+            if(results[i].first_name === answer.choice){
+                chosenPerson= results[i]
+            }
+        }
+        if (chosenPerson.job != answer.job){
+            connection.query(
+                "UPDATE role SET ? WHERE ?",
+                [
+                    {
+                        role: answer.role
+                    },
+                    {
+                        id: chosenPerson.id
+                    }
+                ],
+                function(error){
+                    if(error) throw err;
+                    console.log("Employee updated");
+                    main();
+                }
+            )
+        }
+        else {
+            console.log("Person has the same job. Try again!")
+            main();
+        }
+        
+    })
+    })
+
+    
+}
 
 
 
