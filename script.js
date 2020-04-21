@@ -60,13 +60,22 @@ function addEmployee(){
 
 // -- View departments, roles, employees
 function viewAll(){
-
+    connection.query("SELECT * FROM employee", function(err,results){
+        if (err) throw err;
+    })
+    main();
 }
 function viewDepartment(){
-
+    connection.query("SELECT * FROM department", function(err, results){
+        if (err) throw err;
+    })
+    main();
 }
 function viewRole(){
-
+    connection.query("SELECT * FROM role", function(err, results){
+        if (err) throw err;
+    })
+    main();
 }
 // -- Update employee roles
 function updateEmployee(){
