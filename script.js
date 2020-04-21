@@ -31,13 +31,37 @@ function main(){
 });
 }
 // -- Add departments, roles, employees
-function addEmployee()
+function addEmployee(){
+    inquirer.prompt([{
+        name:"first_name",
+        type:"input",
+        message:"What is the new first name?"
+    },
+    {
+        name:"last_name",
+        type: "input",
+        message: "What is the new last name?"
+    },
+    {
+        name:"role_id",
+        type: "list",
+        message:"What department do you want to add to?",
+        choices:["Management","Accounting","Engineering","Sales"]
+    },
+    {
+        name: "management_id",
+        type: "list",
+        message: "Who is this person reporting to?",
+        choices:["someone","N/A"]
+    }
+])
+}
 
 
 // -- View departments, roles, employees
 function viewAll()
-viewDepartment()
-viewRole()
+function viewDepartment()
+function viewRole()
 // -- Update employee roles
 function updateEmployee()
 
