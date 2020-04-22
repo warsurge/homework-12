@@ -50,11 +50,31 @@ function addEmployee(){
     },
     {
         name: "management_id",
-        type: "list",
+        type: "rawlist",
         message: "Who is this person reporting to?",
-        choices:["someone","N/A"]
+        choices: function(){
+            var choiceArray = [];
+            for (var i =0; i < results.length; i++){
+                choiceArray.push(results[i].manager_id);
+            }
+            return choiceArray;
+        }
     }
-])
+]).then(function(answer){
+    connection.query(
+        "INSERT INTO employee SET ?",
+        {
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            role_id: answer.role_id,
+            management_id: answer.management_id
+        },
+        function(err){
+            if(err) throw err;
+            console.log("Employee Added!")
+        }
+    )
+})
 }
 
 
