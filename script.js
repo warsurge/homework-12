@@ -87,12 +87,23 @@ function viewAll(){
     main();
 }
 function viewDepartment(){
+    inquirer
+    .prompt({
+      name: "artist",
+      type: "rawlist",
+      message: "Which department would you like to search for?",
+      choices: ["Accounting","Sales","Engineering","Management"]
+    }).then( function(answer){
     connection.query(
-        "SELECT employee.first_name, employee.last_name, employee.role_id, department.id, department.name FROM department INNER JOIN employee ON employee.role_id = department.id", function(err, results){
+        "SELECT employee.first_name, employee.last_name, employee.role_id, department.id, department.name FROM department INNER JOIN employee ON employee.role_id = department.id WHERE department.name = ?", 
+        [answer.artist],function(err, results){
         if (err) throw err;
         console.table(results)
+        main();
     })
-    main();
+    
+})
+
 }
 function viewRole(){
     connection.query("SELECT * FROM role", function(err, results){
