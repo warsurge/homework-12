@@ -106,10 +106,21 @@ function viewDepartment(){
 
 }
 function viewRole(){
-    connection.query("SELECT * FROM role", function(err, results){
+    inquirer
+    .prompt({
+      name: "artist",
+      type: "rawlist",
+      message: "Which role would you like to search for?",
+      choices: ["Accountant","Salesman","Engineer","Manager"]
+    }).then( function(answer){
+    connection.query("SELECT employee.first_name, employee.last_name, employee.role_id, role.id, role.title, role.salary FROM role INNER JOIN employee ON employee.role_id = role.id WHERE role.title=?", 
+    [answer.artist], function(err, results){
         if (err) throw err;
+        console.table(results)
+        main();
     })
-    main();
+   
+})
 }
 // -- Update employee roles
 function updateEmployee(){
