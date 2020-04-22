@@ -82,12 +82,15 @@ function addEmployee(){
 function viewAll(){
     connection.query("SELECT * FROM employee", function(err,results){
         if (err) throw err;
+        console.table(results)
     })
     main();
 }
 function viewDepartment(){
-    connection.query("SELECT * FROM department", function(err, results){
+    connection.query(
+        "SELECT employee.first_name, employee.last_name, employee.role_id, department.id, department.name FROM department INNER JOIN employee ON employee.role_id = department.id", function(err, results){
         if (err) throw err;
+        console.table(results)
     })
     main();
 }
@@ -121,7 +124,7 @@ function updateEmployee(){
             message:"What is the position they are going to be in?"
         }
     ]).then(function(answer){
-        const chosenPerson;
+        var chosenPerson;
         for(var i = 0; i < results.length; i++){
             if(results[i].first_name === answer.choice){
                 chosenPerson= results[i]
@@ -156,7 +159,7 @@ function updateEmployee(){
     
 }
 
-
+main();
 
 // -- Bonus points if you're able to:
 
