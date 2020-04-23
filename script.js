@@ -32,6 +32,9 @@ function main(){
 }
 // -- Add departments, roles, employees
 function addEmployee(){
+    connection.query("SELECT * FROM employee, role, department", function(err,results){
+        if (err) throw err;
+    
     inquirer.prompt([{
         name:"first_name",
         type:"input",
@@ -44,21 +47,33 @@ function addEmployee(){
     },
     {
         name:"role_id",
-        type: "list",
-        message:"What department do you want to add to?",
-        choices:["Management","Accounting","Engineering","Sales"]
+        type: "input",
+        message:"What is the role id? (1,2,3,4)",
+        choices:[1,2,3,4]
+    },
+    {
+        name:"salary",
+        type: "input",
+        message: "What do you want to set the salary at?"
+    },
+    {
+        name:"job_title",
+        type: "rawlist",
+        message:"What is the job title of the employee?",
+        choices: ["Salesman", "Accountant", "Engineer", "Manager"]
     },
     {
         name: "management_id",
         type: "rawlist",
-        message: "Who is this person reporting to?",
-        choices: function(){
-            var choiceArray = [];
-            for (var i =0; i < results.length; i++){
-                choiceArray.push(results[i].manager_id);
-            }
-            return choiceArray;
-        }
+        message: "What is the manager id number?",
+        choices: [1,0]
+        // choices:  function(){
+        //     var choiceArray = [];
+        //     for (var i =0; i < results.length; i++){
+        //         choiceArray.push(results[i].manager_id);
+        //     }
+        //     return choiceArray;
+        // }
     }
 ]).then(function(answer){
     connection.query(
@@ -68,12 +83,22 @@ function addEmployee(){
             last_name: answer.last_name,
             role_id: answer.role_id,
             management_id: answer.management_id
+            
+        },
+        "INSERT INTO role SET ?",
+        {
+            title: answer.job_title,
+            salary: answer.salary
+
         },
         function(err){
             if(err) throw err;
             console.log("Employee Added!")
+            main();
         }
     )
+    
+})
 })
 }
 
@@ -142,22 +167,27 @@ function updateEmployee(){
         },
         {
             name: "job",
-            type:"input",
-            message:"What is the position they are going to be in?"
+            type:"rawlist",
+            message:"What is the position they are going to be in?",
+            choices:["Accountant","Salesman","Engineer","Manager"]
         }
     ]).then(function(answer){
+        console.log(answer)
         var chosenPerson;
         for(var i = 0; i < results.length; i++){
             if(results[i].first_name === answer.choice){
                 chosenPerson= results[i]
             }
         }
+        console.log(chosenPerson)
         if (chosenPerson.job != answer.job){
             connection.query(
+                
                 "UPDATE role SET ? WHERE ?",
                 [
+
                     {
-                        role: answer.role
+                        title: answer.job
                     },
                     {
                         id: chosenPerson.id

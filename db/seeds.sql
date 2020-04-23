@@ -29,5 +29,5 @@ VALUES ("Accountant","65000",1),
 INSERT INTO employee(first_name,last_name,role_id,manager_id)
 VALUES ("Zac","Brown",1,4),
 ("Jon","Jovi",2,4),
-("Chris", "Eckler",3,2),
+("Chris", "Eckler",3,4),
 ("Sara","Hissom",4,NULL);
