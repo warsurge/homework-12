@@ -62,11 +62,6 @@ function addEmployee(){
         //     return choiceArray;
         // }
     }
-,{ 
-    name: "salary",
-    type: "input",
-    message: "How much money will they make?",
-}
 ]).then(function(answer){
     connection.query(
         "INSERT INTO employee SET ?",
@@ -76,10 +71,6 @@ function addEmployee(){
             role_id: answer.role_id,
             manager_id: answer.manager_id
             
-        },
-        "INSERT INTO role SET ?",
-        {
-            salary: answer.salary
         },
         function(err){
             if(err) throw err;
