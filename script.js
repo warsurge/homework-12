@@ -32,8 +32,6 @@ function main(){
 }
 // -- Add departments, roles, employees
 function addEmployee(){
-    connection.query("SELECT * FROM employee, role, department", function(err,results){
-        if (err) throw err;
     
     inquirer.prompt([{
         name:"first_name",
@@ -52,18 +50,7 @@ function addEmployee(){
         choices:[1,2,3,4]
     },
     {
-        name:"salary",
-        type: "input",
-        message: "What do you want to set the salary at?"
-    },
-    {
-        name:"job_title",
-        type: "rawlist",
-        message:"What is the job title of the employee?",
-        choices: ["Salesman", "Accountant", "Engineer", "Manager"]
-    },
-    {
-        name: "management_id",
+        name: "manager_id",
         type: "rawlist",
         message: "What is the manager id number?",
         choices: [1,0]
@@ -75,6 +62,11 @@ function addEmployee(){
         //     return choiceArray;
         // }
     }
+,{ 
+    name: "salary",
+    type: "input",
+    message: "How much money will they make?",
+}
 ]).then(function(answer){
     connection.query(
         "INSERT INTO employee SET ?",
@@ -82,14 +74,12 @@ function addEmployee(){
             first_name: answer.first_name,
             last_name: answer.last_name,
             role_id: answer.role_id,
-            management_id: answer.management_id
+            manager_id: answer.manager_id
             
         },
         "INSERT INTO role SET ?",
         {
-            title: answer.job_title,
             salary: answer.salary
-
         },
         function(err){
             if(err) throw err;
@@ -99,7 +89,7 @@ function addEmployee(){
     )
     
 })
-})
+
 }
 
 
@@ -172,14 +162,14 @@ function updateEmployee(){
             choices:["Accountant","Salesman","Engineer","Manager"]
         }
     ]).then(function(answer){
-        console.log(answer)
+        
         var chosenPerson;
         for(var i = 0; i < results.length; i++){
             if(results[i].first_name === answer.choice){
                 chosenPerson= results[i]
             }
         }
-        console.log(chosenPerson)
+        
         if (chosenPerson.job != answer.job){
             connection.query(
                 
